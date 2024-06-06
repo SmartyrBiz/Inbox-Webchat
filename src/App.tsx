@@ -213,9 +213,9 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-screen">
+    <div className="h-full w-full">
       <button
-        className="absolute bottom-4 justify-center flex items-center right-4 bg-blue-500 w-14 h-14 rounded-full z-50 text-white font-semibold text-lg shadow-lg"
+        className="fixed bottom-4 justify-center flex items-center right-4 bg-blue-500 w-14 h-14 rounded-full z-50 text-white font-semibold text-lg shadow-lg"
         onClick={handleButtonClick}
       >
         <svg
