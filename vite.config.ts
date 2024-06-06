@@ -1,22 +1,20 @@
+// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
 
 export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: path.resolve(__dirname, "src/main.tsx"),
-      name: "WebChat",
+      entry: "src/main.tsx", // Your entry point
+      name: "Webchat", // Global variable name for your library
       fileName: (format) => `webchat.${format}.js`,
     },
     rollupOptions: {
-      // Ensure to externalize dependencies that shouldn't be bundled
-      // into your library
+      // Make sure to externalize deps that shouldn't be bundled into your library
       external: ["react", "react-dom"],
       output: {
-        // Provide global variables to use in the UMD build
-        // for externalized deps
+        // Provide global variables to use in the UMD build for externalized deps
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
