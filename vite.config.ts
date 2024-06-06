@@ -1,26 +1,17 @@
-// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { nodePolyfills } from "vite-plugin-node-polyfills";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), nodePolyfills()],
+  plugins: [react(), cssInjectedByJsPlugin()],
   build: {
-    lib: {
-      entry: "src/main.tsx", // Your entry point
-      name: "Webchat", // Global variable name for your library
-      fileName: (format) => `webchat.${format}.js`,
-    },
+    cssCodeSplit: false,
     rollupOptions: {
-      // Make sure to externalize deps that shouldn't be bundled into your library
-      external: ["react", "react-dom"],
-      output: {
-        // Provide global variables to use in the UMD build for externalized deps
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-        },
+      input: {
+        app: "./src/main.tsx",
       },
     },
   },
+  base: "https://cdn.jsdelivr.net/gh/SmartyrBiz/Inbox-Webchat@main/dist/",
 });
