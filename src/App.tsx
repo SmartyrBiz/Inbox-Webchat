@@ -254,7 +254,7 @@ const App: React.FC = () => {
 
       {(open || isClosing) && (
         <div
-          className={`absolute z-50 bottom-[72px] right-[72px] flex flex-col justify-center items-center w-80 h-[30rem] bg-gray-100 rounded-xl shadow-lg p-4 border webchat-container ${
+          className={`fixed z-50 bottom-[72px] right-[72px] flex flex-col justify-center items-center w-80 h-[30rem] bg-gray-100 rounded-xl shadow-lg p-4 border webchat-container ${
             isClosing ? "fade-out" : "fade-in"
           }`}
         >
