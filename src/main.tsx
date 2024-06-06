@@ -1,8 +1,10 @@
-import ReactDOM from "react-dom";
-import App from "./App";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
 
-const render = (container: ReactDOM.Container | null) => {
-  ReactDOM.render(<App />, container);
-};
-
-export default render;
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
