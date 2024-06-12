@@ -8,7 +8,8 @@ const App: React.FC = () => {
   const [messages, setMessages] = useState<
     {
       id: string;
-      message: string;
+      message?: string;
+      photoUrl?: string;
       sender: {
         name: string;
         role: string;
@@ -160,6 +161,58 @@ const App: React.FC = () => {
     }
   };
 
+  const handleSendImage = async (url: string) => {
+    const tempId = new Date().toISOString();
+    setMessages([
+      ...messages,
+      {
+        id: tempId,
+        photoUrl: url,
+        sender: {
+          name: user?.name || "User",
+          role: "user",
+        },
+      },
+    ]);
+
+    const response = await fetch(
+      "http://localhost:4444/api/v1/webchat/message",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          image: url,
+          name: user?.name,
+          email: user?.email,
+          organisationId: user?.organisationId,
+        }),
+      }
+    );
+
+    if (response.status === 200) {
+      const data = await response.json();
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.id === tempId
+            ? {
+                ...msg,
+                id: data.id,
+                message: data.message,
+              }
+            : msg
+        )
+      );
+    } else {
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg.id !== tempId)
+      );
+      alert("Error sending message");
+    }
+  };
+
   const handleSendMessage = async (message: string) => {
     const tempId = new Date().toISOString();
     setMessages([
@@ -262,6 +315,7 @@ const App: React.FC = () => {
             messages={messages}
             user={user}
             setUser={setUser}
+            handleSendImage={handleSendImage}
             handleSendMessage={handleSendMessage}
           />
         </div>
