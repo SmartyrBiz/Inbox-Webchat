@@ -32,3 +32,23 @@
 .fade-out {
   animation-name: fadeOut;
 }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 #f3f4f6;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #3b82f6;
+  border-radius: 10px;
+  border: 3px none #ffffff;
+}
