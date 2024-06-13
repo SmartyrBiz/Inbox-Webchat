@@ -3,9 +3,8 @@ import Webchat from "./components/Webchat";
 import notification from "./assets/notification.wav";
 
 const App: React.FC = () => {
-  const params = new URLSearchParams(window.location.search);
-  const color = params.get("color");
-  const organisationId = params.get("organisationId");
+  const color = window.WebChatConfig.color;
+  const organisationId = window.WebChatConfig.organisationId;
 
   const [open, setOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
