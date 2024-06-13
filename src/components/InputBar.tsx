@@ -133,7 +133,7 @@ const InputBar: React.FC<InputBarProps> = ({
       <form onSubmit={handleSend} className="flex w-full">
         <input
           type="text"
-          className="flex-1 p-2 border rounded-xl shadow !outline-none"
+          className="flex-1 p-2 w-full border rounded-xl shadow !outline-none text-sm sm:text-base"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type a message..."

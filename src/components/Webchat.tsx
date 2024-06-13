@@ -23,6 +23,7 @@ interface WebchatProps {
     React.SetStateAction<{
       name: string;
       email: string;
+      phone: string;
       organisationId: string;
     } | null>
   >;
@@ -48,9 +49,10 @@ const Webchat: React.FC<WebchatProps> = ({
   const handleSetUser = (
     name: string,
     email: string,
+    phone: string,
     organisationId: string
   ) => {
-    const userInfo = { name, email, organisationId };
+    const userInfo = { name, email, phone, organisationId };
     setUser(userInfo);
     sessionStorage.setItem("user", JSON.stringify(userInfo));
   };

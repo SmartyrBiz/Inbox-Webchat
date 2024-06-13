@@ -19,6 +19,7 @@ const App: React.FC = () => {
   const [user, setUser] = useState<{
     name: string;
     email: string;
+    phone: string;
     organisationId: string;
   } | null>(null);
   // const [isDisconnected, setIsDisconnected] = useState(false);
@@ -64,13 +65,13 @@ const App: React.FC = () => {
           type: "init",
           name: user?.name,
           email: user?.email,
+          phone: user?.phone,
           organisationId: user?.organisationId,
         })
       );
     };
 
     ws.current.onmessage = (event) => {
-      console.log("WebSocket message received");
       const data = JSON.parse(event.data);
       if (data.type !== "pong") {
         setMessages((prevMessages) => [
@@ -78,6 +79,7 @@ const App: React.FC = () => {
           {
             id: data.id,
             message: data.message,
+            photoUrl: data.photoUrl,
             sender: {
               name: data.sender.name,
               role: data.sender.role,
@@ -85,7 +87,7 @@ const App: React.FC = () => {
           },
         ]);
 
-        console.log(data, openRef.current); // log the open state
+        console.log(data, openRef.current);
 
         if (!openRef.current) {
           console.log("Message received while chat is closed");
@@ -155,7 +157,7 @@ const App: React.FC = () => {
       setTimeout(() => {
         setOpen(false);
         setIsClosing(false);
-      }, 100); // match the animation duration
+      }, 100);
     } else {
       setOpen(true);
     }
@@ -187,6 +189,7 @@ const App: React.FC = () => {
           image: url,
           name: user?.name,
           email: user?.email,
+          phone: user?.phone,
           organisationId: user?.organisationId,
         }),
       }
@@ -239,6 +242,7 @@ const App: React.FC = () => {
           message,
           name: user?.name,
           email: user?.email,
+          phone: user?.phone,
           organisationId: user?.organisationId,
         }),
       }
@@ -268,7 +272,7 @@ const App: React.FC = () => {
   return (
     <div className="h-full w-full">
       <button
-        className="fixed bottom-4 justify-center flex items-center right-4 bg-blue-500 w-14 h-14 rounded-full z-50 text-white font-semibold text-lg shadow-lg"
+        className="fixed bottom-2 sm:bottom-4 justify-center flex items-center sm:right-4 right-2 bg-blue-500 w-14 h-14 rounded-full z-50 text-white font-semibold text-lg shadow-lg"
         onClick={handleButtonClick}
       >
         <svg
@@ -307,7 +311,7 @@ const App: React.FC = () => {
 
       {(open || isClosing) && (
         <div
-          className={`fixed z-50 bottom-[72px] right-[72px] flex flex-col justify-center items-center w-80 h-[30rem] bg-gray-100 rounded-xl shadow-lg p-4 border webchat-container ${
+          className={`fixed z-50 bottom-[72px] sm:right-[72px] left-[2%] sm:left-auto flex flex-col justify-center w-[96%] items-center sm:w-80 h-[30rem] bg-gray-100 rounded-xl shadow-lg p-4 border webchat-container ${
             isClosing ? "fade-out" : "fade-in"
           }`}
         >

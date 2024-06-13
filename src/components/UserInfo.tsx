@@ -2,16 +2,22 @@
 import React, { useState } from "react";
 
 interface UserInfoProps {
-  setUser: (name: string, email: string, organisationId: string) => void;
+  setUser: (
+    name: string,
+    email: string,
+    phone: string,
+    organisationId: string
+  ) => void;
 }
 
 const UserInfo: React.FC<UserInfoProps> = ({ setUser }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   const handleSetUser = () => {
     if (name.trim() !== "" && email.trim() !== "") {
-      setUser(name, email, "1db2e22a-746e-4324-98df-572c5996e5da");
+      setUser(name, email, phone, "1db2e22a-746e-4324-98df-572c5996e5da");
     }
   };
 
@@ -31,6 +37,13 @@ const UserInfo: React.FC<UserInfoProps> = ({ setUser }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
+        />
+        <input
+          type="text"
+          className="w-full p-2 mb-2 border rounded-lg"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="Phone"
         />
         <button
           onClick={handleSetUser}
