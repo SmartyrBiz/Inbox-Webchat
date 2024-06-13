@@ -5,6 +5,7 @@ import UserInfo from "../components/UserInfo";
 import ImageMessage from "./ImageMessage";
 
 interface WebchatProps {
+  theme: string;
   messages: {
     id: string;
     message?: string;
@@ -32,6 +33,7 @@ interface WebchatProps {
 }
 
 const Webchat: React.FC<WebchatProps> = ({
+  theme,
   messages,
   user,
   setUser,
@@ -58,7 +60,7 @@ const Webchat: React.FC<WebchatProps> = ({
   };
 
   if (!user) {
-    return <UserInfo setUser={handleSetUser} />;
+    return <UserInfo theme={theme} setUser={handleSetUser} />;
   }
 
   return (
@@ -91,6 +93,7 @@ const Webchat: React.FC<WebchatProps> = ({
         <div ref={messagesEndRef} />
       </div>
       <InputBar
+        theme={theme}
         sendMessage={handleSendMessage}
         sendImage={handleSendImage}
         sendingMessage={false}

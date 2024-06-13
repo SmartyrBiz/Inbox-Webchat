@@ -3,12 +3,14 @@ import EmojiPicker from "./EmojiPicker";
 // import FilePicker from "./FilePicker";
 
 interface InputBarProps {
+  theme: string;
   sendMessage: (message: string) => void;
   sendImage: (url: string) => void;
   sendingMessage: boolean;
 }
 
 const InputBar: React.FC<InputBarProps> = ({
+  theme,
   sendMessage,
   sendImage,
   sendingMessage,
@@ -125,8 +127,11 @@ const InputBar: React.FC<InputBarProps> = ({
       >
         <div className="flex p-2 border rounded-xl shadow bg-white w-full">
           <div
-            style={{ width: `${fileUploadingPercentage}%` }}
-            className={`h-4 bg-blue-500 rounded-xl`}
+            style={{
+              width: `${fileUploadingPercentage}%`,
+              backgroundColor: theme,
+            }}
+            className={`h-4  rounded-xl`}
           ></div>
         </div>
       </div>
@@ -141,7 +146,8 @@ const InputBar: React.FC<InputBarProps> = ({
         <button
           type="submit"
           disabled={input.trim() === "" || sendingMessage}
-          className="ml-2 px-3 text-white bg-blue-500 disabled:bg-blue-600 rounded-xl shadow aspect-square transition-colors"
+          style={{ backgroundColor: theme }}
+          className="ml-2 px-3 text-white rounded-xl shadow aspect-square transition-colors"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -184,9 +190,8 @@ const InputBar: React.FC<InputBarProps> = ({
             </svg>
           </button>
           <button
-            className={`${
-              emojiPickerOpen ? "text-blue-500" : "text-gray-500"
-            } hover:bg-gray-200 transition-colors p-2 rounded-lg aspect-square text-sm`}
+            style={{ color: emojiPickerOpen ? theme : "#6b7280" }}
+            className={`hover:bg-gray-200 transition-colors p-2 rounded-lg aspect-square text-sm`}
             onClick={() => setEmojiPickerOpen((prev) => !prev)}
           >
             <svg

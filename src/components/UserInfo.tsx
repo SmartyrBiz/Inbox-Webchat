@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 
 interface UserInfoProps {
+  theme: string;
   setUser: (
     name: string,
     email: string,
@@ -10,7 +11,7 @@ interface UserInfoProps {
   ) => void;
 }
 
-const UserInfo: React.FC<UserInfoProps> = ({ setUser }) => {
+const UserInfo: React.FC<UserInfoProps> = ({ theme, setUser }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -47,7 +48,8 @@ const UserInfo: React.FC<UserInfoProps> = ({ setUser }) => {
         />
         <button
           onClick={handleSetUser}
-          className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg font-semibold"
+          style={{ backgroundColor: theme }}
+          className="w-full px-4 py-2 text-white  rounded-lg font-semibold"
         >
           Start Chatting
         </button>

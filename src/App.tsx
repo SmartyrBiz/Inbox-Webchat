@@ -3,6 +3,10 @@ import Webchat from "./components/Webchat";
 import notification from "./assets/notification.wav";
 
 const App: React.FC = () => {
+  const params = new URLSearchParams(window.location.search);
+  const color = params.get("color");
+  const organisationId = params.get("organisationId");
+
   const [open, setOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [messages, setMessages] = useState<
@@ -40,6 +44,13 @@ const App: React.FC = () => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    if (!organisationId) {
+      alert(
+        "If you're an admin, please provide the organisation ID in the URL to use Smartyr Webchat"
+      );
+      return;
+    }
   }, []);
 
   const connectWebSocket = () => {
@@ -66,7 +77,7 @@ const App: React.FC = () => {
           name: user?.name,
           email: user?.email,
           phone: user?.phone,
-          organisationId: user?.organisationId,
+          organisationId: organisationId,
         })
       );
     };
@@ -190,7 +201,7 @@ const App: React.FC = () => {
           name: user?.name,
           email: user?.email,
           phone: user?.phone,
-          organisationId: user?.organisationId,
+          organisationId: organisationId,
         }),
       }
     );
@@ -243,7 +254,7 @@ const App: React.FC = () => {
           name: user?.name,
           email: user?.email,
           phone: user?.phone,
-          organisationId: user?.organisationId,
+          organisationId: organisationId,
         }),
       }
     );
@@ -272,7 +283,8 @@ const App: React.FC = () => {
   return (
     <div className="h-full w-full">
       <button
-        className="fixed bottom-2 sm:bottom-4 justify-center flex items-center sm:right-4 right-2 bg-blue-500 w-14 h-14 rounded-full z-50 text-white font-semibold text-lg shadow-lg"
+        style={{ backgroundColor: color ? `#${color}` : "#3b82f6" }}
+        className={`fixed bottom-2 sm:bottom-4 justify-center flex items-center sm:right-4 right-2 w-14 h-14 rounded-full z-50 text-white font-semibold text-lg shadow-lg`}
         onClick={handleButtonClick}
       >
         <svg
@@ -316,6 +328,7 @@ const App: React.FC = () => {
           }`}
         >
           <Webchat
+            theme={color ? `#${color}` : "#3b82f6"}
             messages={messages}
             user={user}
             setUser={setUser}
