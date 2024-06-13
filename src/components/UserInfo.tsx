@@ -49,6 +49,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ theme, setUser }) => {
         <button
           onClick={handleSetUser}
           style={{ backgroundColor: theme }}
+          disabled={!name || !email || !phone}
           className="w-full px-4 py-2 text-white  rounded-lg font-semibold"
         >
           Start Chatting

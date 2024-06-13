@@ -81,6 +81,7 @@ const Webchat: React.FC<WebchatProps> = ({
               )}
               {msg.message && (
                 <ChatMessage
+                  theme={theme}
                   key={index}
                   message={msg.message}
                   sender={msg.sender}

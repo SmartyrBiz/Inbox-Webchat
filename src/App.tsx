@@ -35,6 +35,35 @@ const App: React.FC = () => {
   const openRef = useRef(open); // Ref to store the current state of open
 
   useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: #${color} #f3f4f6;
+      }
+
+      /* Chrome, Edge, and Safari */
+      *::-webkit-scrollbar {
+        width: 16px;
+      }
+
+      *::-webkit-scrollbar-track {
+        background: #f3f4f6;
+      }
+
+      *::-webkit-scrollbar-thumb {
+        background-color: #${color};
+        border-radius: 10px;
+        border: 3px none #ffffff;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  useEffect(() => {
     openRef.current = open; // Update the ref whenever open changes
   }, [open]);
 

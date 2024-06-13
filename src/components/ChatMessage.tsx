@@ -1,6 +1,7 @@
 import React from "react";
 
 interface ChatMessageProps {
+  theme: string;
   message: string;
   sender: {
     name: string;
@@ -10,6 +11,7 @@ interface ChatMessageProps {
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({
+  theme,
   message,
   sender,
   showName,
@@ -30,12 +32,12 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         className={`flex ${isUserMessage ? "justify-end" : "justify-start"}`}
       >
         <div
-          className={`p-2 rounded-lg ${
+          style={{ backgroundColor: isUserMessage ? "#e5e7eb" : theme }}
+          className={`p-2 rounded-lg break-words max-w-[90%] ${
             isUserMessage
-              ? "bg-gray-200 rounded-tr-none self-end"
-              : "bg-blue-500 text-white rounded-tl-none self-start"
+              ? "rounded-tr-none self-end"
+              : "text-white rounded-tl-none self-start"
           }`}
-          style={{ maxWidth: "90%" }}
         >
           {message}
         </div>
