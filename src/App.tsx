@@ -37,21 +37,21 @@ const App: React.FC = () => {
   useEffect(() => {
     const style = document.createElement("style");
     style.innerHTML = `
-      * {
+      #webchat-container {
         scrollbar-width: thin;
         scrollbar-color: #${color} #f3f4f6;
       }
 
       /* Chrome, Edge, and Safari */
-      *::-webkit-scrollbar {
+      #webchat-container::-webkit-scrollbar {
         width: 16px;
       }
 
-      *::-webkit-scrollbar-track {
+      #webchat-container::-webkit-scrollbar-track {
         background: #f3f4f6;
       }
 
-      *::-webkit-scrollbar-thumb {
+      #webchat-container::-webkit-scrollbar-thumb {
         background-color: #${color};
         border-radius: 10px;
         border: 3px none #ffffff;
@@ -309,7 +309,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="h-full w-full">
+    <div id="webchat-container" className="h-full w-full">
       <button
         style={{ backgroundColor: color ? `#${color}` : "#3b82f6" }}
         className={`fixed bottom-2 sm:bottom-4 justify-center flex items-center sm:right-4 right-2 w-14 h-14 rounded-full z-50 text-white font-semibold text-lg shadow-lg`}
