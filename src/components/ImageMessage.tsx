@@ -1,6 +1,7 @@
 import React from "react";
 
 interface ImageMessageProps {
+  theme: string;
   photoUrl: string;
   sender: {
     name: string;
@@ -10,6 +11,7 @@ interface ImageMessageProps {
 }
 
 const ImageMessage: React.FC<ImageMessageProps> = ({
+  theme,
   photoUrl,
   sender,
   showName,
@@ -33,9 +35,12 @@ const ImageMessage: React.FC<ImageMessageProps> = ({
           className={`p-2 rounded-lg ${
             isUserMessage
               ? "bg-gray-200 rounded-tr-none self-end"
-              : "bg-blue-500 text-white rounded-tl-none self-start"
+              : "text-white rounded-tl-none self-start"
           }`}
-          style={{ maxWidth: "90%" }}
+          style={{
+            maxWidth: "90%",
+            backgroundColor: isUserMessage ? "#e5e7eb" : theme,
+          }}
         >
           <a href={photoUrl} target="_blank" rel="noreferrer">
             <img

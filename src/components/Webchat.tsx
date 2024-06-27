@@ -73,6 +73,7 @@ const Webchat: React.FC<WebchatProps> = ({
             <>
               {msg.photoUrl && (
                 <ImageMessage
+                  theme={theme}
                   key={index}
                   photoUrl={msg.photoUrl}
                   sender={msg.sender}
