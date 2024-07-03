@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import EmojiPicker from "./EmojiPicker";
 // import FilePicker from "./FilePicker";
 
@@ -12,15 +12,10 @@ interface InputBarProps {
 const InputBar: React.FC<InputBarProps> = ({
   theme,
   sendMessage,
-  sendImage,
+  // sendImage,
   sendingMessage,
 }) => {
   const [input, setInput] = useState("");
-  const [user, setUser] = useState<{
-    name: string;
-    email: string;
-    organisationId: string;
-  } | null>(null);
   // const [filePickerOpen, setFilePickerOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -33,58 +28,58 @@ const InputBar: React.FC<InputBarProps> = ({
     setEmojiPickerOpen(false);
   };
 
-  const fetchPresignedUrl = async (file: File) => {
-    setFileUploadingPercentage(25);
+  // const fetchPresignedUrl = async (file: File) => {
+  //   setFileUploadingPercentage(25);
 
-    const response = await fetch(
-      `http://localhost:4444/api/v1/s3/generate-presigned-url`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fileName: file.name,
-          fileType: file.type,
-          email: user?.email,
-          organisationId: user?.organisationId,
-        }),
-      }
-    );
+  //   const response = await fetch(
+  //     `http://localhost:4444/api/v1/s3/generate-presigned-url`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         fileName: file.name,
+  //         fileType: file.type,
+  //         email: user?.email,
+  //         organisationId: user?.organisationId,
+  //       }),
+  //     }
+  //   );
 
-    setFileUploadingPercentage(75);
+  //   setFileUploadingPercentage(75);
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch presigned URL");
-    }
+  //   if (!response.ok) {
+  //     throw new Error("Failed to fetch presigned URL");
+  //   }
 
-    const data = await response.json();
+  //   const data = await response.json();
 
-    await fetch(data.url, {
-      method: "PUT",
-      body: file,
-      headers: {
-        "Content-Type": file.type,
-        // "x-amz-acl": "public-read",
-      },
-    });
+  //   await fetch(data.url, {
+  //     method: "PUT",
+  //     body: file,
+  //     headers: {
+  //       "Content-Type": file.type,
+  //       // "x-amz-acl": "public-read",
+  //     },
+  //   });
 
-    setFileUploadingPercentage(100);
+  //   setFileUploadingPercentage(100);
 
-    // Log the uploaded file URL
-    const fileUrl = data.url.split("?")[0];
-    console.log("File uploaded successfully. URL:", fileUrl);
+  //   // Log the uploaded file URL
+  //   const fileUrl = data.url.split("?")[0];
+  //   console.log("File uploaded successfully. URL:", fileUrl);
 
-    setTimeout(() => {
-      setFile(null);
-      if (fileRef.current) {
-        fileRef.current.value = "";
-      }
-      setFileUploadingPercentage(0);
+  //   setTimeout(() => {
+  //     setFile(null);
+  //     if (fileRef.current) {
+  //       fileRef.current.value = "";
+  //     }
+  //     setFileUploadingPercentage(0);
 
-      sendImage(fileUrl);
-    }, 500);
-  };
+  //     sendImage(fileUrl);
+  //   }, 500);
+  // };
 
   const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -96,18 +91,11 @@ const InputBar: React.FC<InputBarProps> = ({
     setInput("");
   };
 
-  useEffect(() => {
-    if (!file) return;
+  // useEffect(() => {
+  //   if (!file) return;
 
-    fetchPresignedUrl(file);
-  }, [file]);
-
-  useEffect(() => {
-    const storedUser = sessionStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  //   fetchPresignedUrl(file);
+  // }, [file]);
 
   return (
     <div className="flex flex-col w-full items-center justify-between gap-1">
@@ -183,9 +171,9 @@ const InputBar: React.FC<InputBarProps> = ({
               className="size-4"
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M18.97 3.659a2.25 2.25 0 0 0-3.182 0l-10.94 10.94a3.75 3.75 0 1 0 5.304 5.303l7.693-7.693a.75.75 0 0 1 1.06 1.06l-7.693 7.693a5.25 5.25 0 1 1-7.424-7.424l10.939-10.94a3.75 3.75 0 1 1 5.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 0 1 5.91 15.66l7.81-7.81a.75.75 0 0 1 1.061 1.06l-7.81 7.81a.75.75 0 0 0 1.054 1.068L18.97 6.84a2.25 2.25 0 0 0 0-3.182Z"
-                clip-rule="evenodd"
+                clipRule="evenodd"
               />
             </svg>
           </button>
@@ -203,8 +191,8 @@ const InputBar: React.FC<InputBarProps> = ({
               className="size-4"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z"
               />
             </svg>

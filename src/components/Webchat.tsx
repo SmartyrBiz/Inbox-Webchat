@@ -17,15 +17,12 @@ interface WebchatProps {
   }[];
   user: {
     name: string;
-    email: string;
-    organisationId: string;
+    contactId: string;
   } | null;
   setUser: React.Dispatch<
     React.SetStateAction<{
       name: string;
-      email: string;
-      phone: string;
-      organisationId: string;
+      contactId: string;
     } | null>
   >;
   handleSendImage: (url: string) => void;
@@ -48,13 +45,8 @@ const Webchat: React.FC<WebchatProps> = ({
     }
   }, [messages]);
 
-  const handleSetUser = (
-    name: string,
-    email: string,
-    phone: string,
-    organisationId: string
-  ) => {
-    const userInfo = { name, email, phone, organisationId };
+  const handleSetUser = (name: string, contactId: string) => {
+    const userInfo = { name, contactId };
     setUser(userInfo);
     sessionStorage.setItem("user", JSON.stringify(userInfo));
   };
@@ -68,9 +60,9 @@ const Webchat: React.FC<WebchatProps> = ({
       <div className="flex-1 overflow-y-auto relative w-full">
         {messages.map((msg, index) => {
           const showName =
-            index === 0 || messages[index - 1].sender.name !== msg.sender.name;
+            index === 0 || messages[index - 1].sender.name !== msg.sender.name || messages[index - 1].sender.role !== msg.sender.role;
           return (
-            <>
+            <div key={index}>
               {msg.photoUrl && (
                 <ImageMessage
                   theme={theme}
@@ -89,7 +81,7 @@ const Webchat: React.FC<WebchatProps> = ({
                   showName={showName}
                 />
               )}
-            </>
+            </div>
           );
         })}
         <div ref={messagesEndRef} />

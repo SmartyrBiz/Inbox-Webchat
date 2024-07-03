@@ -1,26 +1,49 @@
-// src/components/UserInfo.tsx
-import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import React, { useState, useEffect } from "react";
+import { CONNECT_TO_CHAT } from "../graphql/CONNECT_TO_CHAT";
 
 interface UserInfoProps {
   theme: string;
-  setUser: (
-    name: string,
-    email: string,
-    phone: string,
-    organisationId: string
-  ) => void;
+  setUser: (name: string, contactId: string) => void;
 }
 
 const UserInfo: React.FC<UserInfoProps> = ({ theme, setUser }) => {
+  const [connectToChat, { data, loading, error }] =
+    useMutation(CONNECT_TO_CHAT);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [formError, setFormError] = useState("");
 
-  const handleSetUser = () => {
-    if (name.trim() !== "" && email.trim() !== "") {
-      setUser(name, email, phone, "1db2e22a-746e-4324-98df-572c5996e5da");
+  const handleSetUser = async () => {
+    setFormError("");
+    if (!name.trim() || !email.trim()) {
+      setFormError("Name and email are required.");
+      return;
+    }
+
+    try {
+      await connectToChat({
+        variables: {
+          name,
+          email,
+          phone,
+          organisationId: "1db2e22a-746e-4324-98df-572c5996e5da",
+        },
+      });
+    } catch (err) {
+      console.error("Error connecting to chat:", err);
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      alert("Error connecting to chat: " + error.message);
+    }
+    if (data?.connectToChat) {
+      setUser(name, data.connectToChat.id);
+    }
+  }, [data, error, name, setUser]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
@@ -46,13 +69,14 @@ const UserInfo: React.FC<UserInfoProps> = ({ theme, setUser }) => {
           onChange={(e) => setPhone(e.target.value)}
           placeholder="Phone"
         />
+        {formError && <p className="text-red-500">{formError}</p>}
         <button
           onClick={handleSetUser}
           style={{ backgroundColor: theme }}
-          disabled={!name || !email || !phone}
-          className="w-full px-4 py-2 text-white  rounded-lg font-semibold"
+          disabled={!name || !email || !phone || loading}
+          className="w-full px-4 py-2 text-white rounded-lg font-semibold"
         >
-          Start Chatting
+          {loading ? "Connecting..." : "Start Chatting"}
         </button>
       </div>
     </div>
