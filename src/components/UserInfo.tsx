@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client";
 import React, { useState, useEffect } from "react";
 import { CONNECT_TO_CHAT } from "../graphql/CONNECT_TO_CHAT";
+import { getTextColorBasedOnBackground } from "../utils/getTextColorBasedOnBackground";
 
 interface UserInfoProps {
   theme: string;
@@ -14,6 +15,16 @@ const UserInfo: React.FC<UserInfoProps> = ({ theme, setUser }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [formError, setFormError] = useState("");
+
+  const isValidEmail = (email: string) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  const isValidPhone = (phone: string) => {
+    const re = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+    return re.test(phone);
+  };
 
   const handleSetUser = async () => {
     setFormError("");
@@ -72,9 +83,28 @@ const UserInfo: React.FC<UserInfoProps> = ({ theme, setUser }) => {
         {formError && <p className="text-red-500">{formError}</p>}
         <button
           onClick={handleSetUser}
-          style={{ backgroundColor: theme }}
-          disabled={!name || !email || !phone || loading}
-          className="w-full px-4 py-2 text-white rounded-lg font-semibold"
+          style={{
+            backgroundColor: theme,
+            opacity:
+              !name ||
+              !email ||
+              !phone ||
+              loading ||
+              !isValidEmail(email) ||
+              !isValidPhone(phone)
+                ? 0.75
+                : 1,
+            color: getTextColorBasedOnBackground(theme),
+          }}
+          disabled={
+            !name ||
+            !email ||
+            !phone ||
+            loading ||
+            !isValidEmail(email) ||
+            !isValidPhone(phone)
+          }
+          className="w-full px-4 py-2 rounded-lg font-semibold"
         >
           {loading ? "Connecting..." : "Start Chatting"}
         </button>

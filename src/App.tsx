@@ -4,6 +4,7 @@ import Webchat from "./components/Webchat";
 import { MESSAGE_SUBSCRIPTION } from "./graphql/MESSAGE_SUBSCRIPTION";
 import notification from "./assets/notification.wav";
 import { SEND_CHAT_MESSAGE } from "./graphql/SEND_CHAT_MESSAGE";
+import { getTextColorBasedOnBackground } from "./utils/getTextColorBasedOnBackground";
 
 const App: FC = () => {
   const color = window.WebChatConfig.color;
@@ -28,7 +29,32 @@ const App: FC = () => {
   } | null>(null);
   const [sendEmbedWebchatMessage] = useMutation(SEND_CHAT_MESSAGE);
   const [unseenMessages, setUnseenMessages] = useState(0);
-  const openRef = useRef(open); // Ref to store the current state of open
+  const openRef = useRef(open);
+
+  const handleSendWelcomeMessage = async (isOpen: boolean) => {
+    const tempId = new Date().toISOString();
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: tempId,
+        message: `Hey there! We're ${
+          isOpen ? "here to help!" : "closed right now."
+        }`,
+        sender: {
+          name: "[BOT] Smartyr",
+          role: "support",
+        },
+      },
+      {
+        id: tempId,
+        message: `Please leave a message, and we'll get back to you ASAP, either by webchat or email.`,
+        sender: {
+          name: "[BOT] Smartyr",
+          role: "support",
+        },
+      },
+    ]);
+  };
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -149,7 +175,44 @@ const App: FC = () => {
   // };
 
   const handleSendImage = async (url: string) => {
-    console.log(url);
+    const tempId = new Date().toISOString();
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: tempId,
+        url,
+        sender: {
+          name: user?.name || "User",
+          role: "user",
+        },
+      },
+    ]);
+
+    // try {
+    //   const { data, errors } = await sendEmbedWebchatMessage({
+    //     variables: {
+    //       url,
+    //       contactId: user?.contactId,
+    //     },
+    //   });
+
+    //   if (errors) {
+    //     console.error("GraphQL errors:", errors);
+    //     throw new Error("Error sending message via GraphQL.");
+    //   }
+
+    //   if (data?.sendEmbedWebchatMessage) {
+    //     console.log("Message sent");
+    //   } else {
+    //     throw new Error("No data received from GraphQL mutation.");
+    //   }
+    // } catch (error) {
+    //   console.error("Error sending message:", error);
+    //   setMessages((prevMessages) =>
+    //     prevMessages.filter((msg) => msg.id !== tempId)
+    //   );
+    //   alert("Error sending message. Please try again.");
+    // }
   };
 
   const handleSendMessage = async (message: string) => {
@@ -219,7 +282,10 @@ const App: FC = () => {
     <div id="webchat-container" className="h-full w-full">
       <div>
         <button
-          style={{ backgroundColor: color ? `#${color}` : "#3b82f6" }}
+          style={{
+            backgroundColor: color ? `#${color}` : "#3b82f6",
+            color: getTextColorBasedOnBackground(`#${color}`),
+          }}
           className={`fixed bottom-2 sm:bottom-4 justify-center flex items-center sm:right-4 right-2 w-14 h-14 rounded-full z-50 text-white font-semibold text-lg shadow-lg`}
           onClick={handleButtonClick}
         >
@@ -268,6 +334,7 @@ const App: FC = () => {
               messages={messages}
               user={user}
               setUser={setUser}
+              handleSendWelcomeMessage={handleSendWelcomeMessage}
               handleSendImage={handleSendImage}
               handleSendMessage={handleSendMessage}
             />

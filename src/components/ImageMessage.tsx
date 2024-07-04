@@ -1,4 +1,5 @@
 import React from "react";
+import { getTextColorBasedOnBackground } from "../utils/getTextColorBasedOnBackground";
 
 interface ImageMessageProps {
   theme: string;
@@ -35,11 +36,14 @@ const ImageMessage: React.FC<ImageMessageProps> = ({
           className={`p-2 rounded-lg ${
             isUserMessage
               ? "bg-gray-200 rounded-tr-none self-end"
-              : "text-white rounded-tl-none self-start"
+              : "rounded-tl-none self-start"
           }`}
           style={{
             maxWidth: "90%",
             backgroundColor: isUserMessage ? theme : "#e5e7eb",
+            color: getTextColorBasedOnBackground(
+              isUserMessage ? theme : "#e5e7eb"
+            ),
           }}
         >
           <a href={photoUrl} target="_blank" rel="noreferrer">

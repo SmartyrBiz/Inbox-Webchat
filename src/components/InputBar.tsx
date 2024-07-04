@@ -2,10 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import EmojiPicker from "./EmojiPicker";
 import { GENERATE_PRESIGNED_URL } from "../graphql/GENERATE_PRESIGNED_URL";
 import { useMutation } from "@apollo/client";
+import { getTextColorBasedOnBackground } from "../utils/getTextColorBasedOnBackground";
 // import FilePicker from "./FilePicker";
 
 interface InputBarProps {
   theme: string;
+  user: {
+    name: string;
+    contactId: string;
+  } | null;
   sendMessage: (message: string) => void;
   sendImage: (url: string) => void;
   sendingMessage: boolean;
@@ -13,6 +18,7 @@ interface InputBarProps {
 
 const InputBar: React.FC<InputBarProps> = ({
   theme,
+  // user,
   sendMessage,
   sendImage,
   sendingMessage,
@@ -55,20 +61,19 @@ const InputBar: React.FC<InputBarProps> = ({
 
     setFileUploadingPercentage(75);
 
-    console.log(data);
-
-    // await fetch(data.url, {
-    //   method: "PUT",
-    //   body: file,
-    //   headers: {
-    //     "Content-Type": file.type,
-    //   },
-    // });
+    await fetch(data.generatePresignedUrl.url, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
 
     setFileUploadingPercentage(100);
 
-    const fileUrl = data.url.split("?")[0];
-    console.log("File uploaded successfully. URL:", fileUrl);
+    const publicUrl = `https://inbox-user-uploads-test.s3.ap-southeast-2.amazonaws.com/${file.name}`;
+
+    console.log("File uploaded successfully. URL:", publicUrl);
 
     setTimeout(() => {
       setFile(null);
@@ -77,7 +82,7 @@ const InputBar: React.FC<InputBarProps> = ({
       }
       setFileUploadingPercentage(0);
 
-      sendImage(fileUrl);
+      sendImage(publicUrl);
     }, 500);
   };
 
@@ -134,8 +139,11 @@ const InputBar: React.FC<InputBarProps> = ({
         <button
           type="submit"
           disabled={input.trim() === "" || sendingMessage}
-          style={{ backgroundColor: theme }}
-          className="ml-2 px-3 text-white rounded-xl shadow aspect-square transition-colors"
+          style={{
+            backgroundColor: theme,
+            color: getTextColorBasedOnBackground(theme),
+          }}
+          className="ml-2 px-3  rounded-xl shadow aspect-square transition-colors"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,4 +1,5 @@
 import React from "react";
+import { getTextColorBasedOnBackground } from "../utils/getTextColorBasedOnBackground";
 
 interface ChatMessageProps {
   theme: string;
@@ -32,11 +33,16 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         className={`flex ${isUserMessage ? "justify-end" : "justify-start"}`}
       >
         <div
-          style={{ backgroundColor: isUserMessage ? theme : "#e5e7eb" }}
+          style={{
+            backgroundColor: isUserMessage ? theme : "#e5e7eb",
+            color: getTextColorBasedOnBackground(
+              isUserMessage ? theme : "#e5e7eb"
+            ),
+          }}
           className={`p-2 rounded-lg break-words max-w-[90%] ${
             isUserMessage
-              ? "rounded-tr-none self-end"
-              : "text-white rounded-tl-none self-start"
+              ?  "rounded-tr-none self-end"
+              : "rounded-tl-none self-start"
           }`}
         >
           {message}
