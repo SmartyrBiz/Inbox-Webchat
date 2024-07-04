@@ -35,8 +35,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
           style={{ backgroundColor: isUserMessage ? theme : "#e5e7eb" }}
           className={`p-2 rounded-lg break-words max-w-[90%] ${
             isUserMessage
-              ? "rounded-tr-none self-end"
-              : "text-white rounded-tl-none self-start"
+              ? "text-white rounded-tr-none self-end"
+              : "rounded-tl-none self-start"
           }`}
         >
           {message}

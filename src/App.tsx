@@ -28,7 +28,7 @@ const App: FC = () => {
   } | null>(null);
   const [sendEmbedWebchatMessage] = useMutation(SEND_CHAT_MESSAGE);
   const [unseenMessages, setUnseenMessages] = useState(0);
-  const openRef = useRef(open); // Ref to store the current state of open
+  const openRef = useRef(open);
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -149,7 +149,44 @@ const App: FC = () => {
   // };
 
   const handleSendImage = async (url: string) => {
-    console.log(url);
+    const tempId = new Date().toISOString();
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: tempId,
+        url,
+        sender: {
+          name: user?.name || "User",
+          role: "user",
+        },
+      },
+    ]);
+
+    try {
+      const { data, errors } = await sendEmbedWebchatMessage({
+        variables: {
+          url,
+          contactId: user?.contactId,
+        },
+      });
+
+      if (errors) {
+        console.error("GraphQL errors:", errors);
+        throw new Error("Error sending message via GraphQL.");
+      }
+
+      if (data?.sendEmbedWebchatMessage) {
+        console.log("Message sent");
+      } else {
+        throw new Error("No data received from GraphQL mutation.");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg.id !== tempId)
+      );
+      alert("Error sending message. Please try again.");
+    }
   };
 
   const handleSendMessage = async (message: string) => {
