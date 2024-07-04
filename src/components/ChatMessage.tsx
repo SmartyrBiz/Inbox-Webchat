@@ -32,7 +32,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         className={`flex ${isUserMessage ? "justify-end" : "justify-start"}`}
       >
         <div
-          style={{ backgroundColor: isUserMessage ? "#e5e7eb" : theme }}
+          style={{ backgroundColor: isUserMessage ? theme : "#e5e7eb" }}
           className={`p-2 rounded-lg break-words max-w-[90%] ${
             isUserMessage
               ? "rounded-tr-none self-end"

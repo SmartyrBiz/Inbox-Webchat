@@ -39,7 +39,7 @@ const ImageMessage: React.FC<ImageMessageProps> = ({
           }`}
           style={{
             maxWidth: "90%",
-            backgroundColor: isUserMessage ? "#e5e7eb" : theme,
+            backgroundColor: isUserMessage ? theme : "#e5e7eb",
           }}
         >
           <a href={photoUrl} target="_blank" rel="noreferrer">
