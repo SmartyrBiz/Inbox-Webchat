@@ -1,5 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import EmojiPicker from "./EmojiPicker";
+import { GENERATE_PRESIGNED_URL } from "../graphql/GENERATE_PRESIGNED_URL";
+import { useMutation } from "@apollo/client";
 // import FilePicker from "./FilePicker";
 
 interface InputBarProps {
@@ -12,9 +14,10 @@ interface InputBarProps {
 const InputBar: React.FC<InputBarProps> = ({
   theme,
   sendMessage,
-  // sendImage,
+  sendImage,
   sendingMessage,
 }) => {
+  const [generatePresignedUrl] = useMutation(GENERATE_PRESIGNED_URL);
   const [input, setInput] = useState("");
   // const [filePickerOpen, setFilePickerOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
@@ -28,58 +31,55 @@ const InputBar: React.FC<InputBarProps> = ({
     setEmojiPickerOpen(false);
   };
 
-  // const fetchPresignedUrl = async (file: File) => {
-  //   setFileUploadingPercentage(25);
+  const fetchPresignedUrl = async (file: File) => {
+    setFileUploadingPercentage(25);
 
-  //   const response = await fetch(
-  //     `http://localhost:4444/api/v1/s3/generate-presigned-url`,
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         fileName: file.name,
-  //         fileType: file.type,
-  //         email: user?.email,
-  //         organisationId: user?.organisationId,
-  //       }),
-  //     }
-  //   );
+    const { data, errors } = await generatePresignedUrl({
+      variables: {
+        fileName: file.name,
+        fileType: file.type,
+      },
+    });
 
-  //   setFileUploadingPercentage(75);
+    if (errors) {
+      console.error("GraphQL errors:", errors);
+      alert("Error generating presigned URL. Please try again.");
+      return;
+    }
 
-  //   if (!response.ok) {
-  //     throw new Error("Failed to fetch presigned URL");
-  //   }
+    if (!data?.generatePresignedUrl) {
+      console.error("No data received from GraphQL mutation.");
+      alert("Error generating presigned URL. Please try again.");
+      return;
+    }
 
-  //   const data = await response.json();
+    setFileUploadingPercentage(75);
 
-  //   await fetch(data.url, {
-  //     method: "PUT",
-  //     body: file,
-  //     headers: {
-  //       "Content-Type": file.type,
-  //       // "x-amz-acl": "public-read",
-  //     },
-  //   });
+    console.log(data);
 
-  //   setFileUploadingPercentage(100);
+    // await fetch(data.url, {
+    //   method: "PUT",
+    //   body: file,
+    //   headers: {
+    //     "Content-Type": file.type,
+    //   },
+    // });
 
-  //   // Log the uploaded file URL
-  //   const fileUrl = data.url.split("?")[0];
-  //   console.log("File uploaded successfully. URL:", fileUrl);
+    setFileUploadingPercentage(100);
 
-  //   setTimeout(() => {
-  //     setFile(null);
-  //     if (fileRef.current) {
-  //       fileRef.current.value = "";
-  //     }
-  //     setFileUploadingPercentage(0);
+    const fileUrl = data.url.split("?")[0];
+    console.log("File uploaded successfully. URL:", fileUrl);
 
-  //     sendImage(fileUrl);
-  //   }, 500);
-  // };
+    setTimeout(() => {
+      setFile(null);
+      if (fileRef.current) {
+        fileRef.current.value = "";
+      }
+      setFileUploadingPercentage(0);
+
+      sendImage(fileUrl);
+    }, 500);
+  };
 
   const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,11 +91,11 @@ const InputBar: React.FC<InputBarProps> = ({
     setInput("");
   };
 
-  // useEffect(() => {
-  //   if (!file) return;
+  useEffect(() => {
+    if (!file) return;
 
-  //   fetchPresignedUrl(file);
-  // }, [file]);
+    fetchPresignedUrl(file);
+  }, [file]);
 
   return (
     <div className="flex flex-col w-full items-center justify-between gap-1">
