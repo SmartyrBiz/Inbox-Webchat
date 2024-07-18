@@ -41,11 +41,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
           }}
           className={`p-2 rounded-lg break-words max-w-[90%] ${
             isUserMessage
-<<<<<<< HEAD
-              ?  "rounded-tr-none self-end"
-=======
-              ? "text-white rounded-tr-none self-end"
->>>>>>> c29d3eb466dfd2fd2173ff969f5deb75cdaeacad
+              ? "rounded-tr-none self-end"
               : "rounded-tl-none self-start"
           }`}
         >

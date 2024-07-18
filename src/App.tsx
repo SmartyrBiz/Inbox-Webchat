@@ -30,7 +30,6 @@ const App: FC = () => {
   const [sendEmbedWebchatMessage] = useMutation(SEND_CHAT_MESSAGE);
   const [unseenMessages, setUnseenMessages] = useState(0);
   const openRef = useRef(open);
-<<<<<<< HEAD
 
   const handleSendWelcomeMessage = async (isOpen: boolean) => {
     const tempId = new Date().toISOString();
@@ -56,8 +55,6 @@ const App: FC = () => {
       },
     ]);
   };
-=======
->>>>>>> c29d3eb466dfd2fd2173ff969f5deb75cdaeacad
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -191,7 +188,6 @@ const App: FC = () => {
       },
     ]);
 
-<<<<<<< HEAD
     // try {
     //   const { data, errors } = await sendEmbedWebchatMessage({
     //     variables: {
@@ -217,33 +213,6 @@ const App: FC = () => {
     //   );
     //   alert("Error sending message. Please try again.");
     // }
-=======
-    try {
-      const { data, errors } = await sendEmbedWebchatMessage({
-        variables: {
-          url,
-          contactId: user?.contactId,
-        },
-      });
-
-      if (errors) {
-        console.error("GraphQL errors:", errors);
-        throw new Error("Error sending message via GraphQL.");
-      }
-
-      if (data?.sendEmbedWebchatMessage) {
-        console.log("Message sent");
-      } else {
-        throw new Error("No data received from GraphQL mutation.");
-      }
-    } catch (error) {
-      console.error("Error sending message:", error);
-      setMessages((prevMessages) =>
-        prevMessages.filter((msg) => msg.id !== tempId)
-      );
-      alert("Error sending message. Please try again.");
-    }
->>>>>>> c29d3eb466dfd2fd2173ff969f5deb75cdaeacad
   };
 
   const handleSendMessage = async (message: string) => {
