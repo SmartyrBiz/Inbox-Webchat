@@ -64,7 +64,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ theme, setUser }) => {
           className="w-full p-2 mb-2 border rounded-lg"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
+          placeholder="Full name"
         />
         <input
           type="email"
